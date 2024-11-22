@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Softener Salt Top-Up Reminder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        input[type="date"], input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 20px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .reminder {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .overdue {
+            color: red;
+        }
+        .on-time {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Water Softener Salt Top-Up Reminder</h1>
+        
+        <label for="refillDate">Last Refill Date:</label>
+        <input type="date" id="refillDate" required>
+
+        <label for="interval">Reminder Interval (in days):</label>
+        <input type="number" id="interval" min="1" required>
+
+        <button onclick="setReminder()">Set Reminder</button>
+
+        <div class="reminder" id="reminderMessage"></div>
+    </div>
+
+    <script>
+        function setReminder() {
+            // Get values from inputs
+            const refillDate = document.getElementById("refillDate").value;
+            const interval = parseInt(document.getElementById("interval").value);
+
+            // Validate inputs
+            if (!refillDate || isNaN(interval) || interval <= 0) {
+                alert("Please provide valid input for both fields.");
+                return;
+            }
+
+            // Calculate next refill date
+            const lastRefill = new Date(refillDate);
+            const nextRefill = new Date(lastRefill);
+            nextRefill.setDate(lastRefill.getDate() + interval);
+
+            // Calculate the number of days remaining until next refill
+            const currentDate = new Date();
+            const timeDifference = nextRefill - currentDate;
+            const daysRemaining = Math.ceil(timeDifference / (1000 * 3600 * 24));
+
+            // Display the result
+            const reminderMessage = document.getElementById("reminderMessage");
+
+            if (daysRemaining <= 0) {
+                reminderMessage.innerHTML = "It's time to top-up salt!";
+                reminderMessage.className = "reminder overdue";
+            } else {
+                reminderMessage.innerHTML = `Next top-up in ${daysRemaining} day(s).`;
+                reminderMessage.className = "reminder on-time";
+            }
+        }
+    </script>
+
+</body>
+</html>
